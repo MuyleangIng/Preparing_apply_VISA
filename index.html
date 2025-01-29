@@ -14,6 +14,105 @@
             line-height: 1.8;
             background-color: #f8f9fa;
         }
+        .pdf-viewer {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75);
+        z-index: 99999;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: hidden; /* Prevent body scroll bleeding */
+    }
+
+    .pdf-viewer-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    #pdfFrame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .viewer-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 1;
+    }
+
+    .viewer-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .close-btn {
+        background: #e9ecef;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+        background: #dee2e6;
+    }
+
+    .close-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .pdf-container {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+    }
+
+    @media (max-width: 768px) {
+        .pdf-viewer {
+            padding: 10px;
+        }
+        
+        .viewer-header {
+            height: 50px;
+        }
+
+        .pdf-container {
+            top: 50px;
+        }
+    }
 
         .header-section {
             background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
@@ -70,15 +169,37 @@
             margin: 2rem 0;
         }
 
-        @media (max-width: 768px) {
-            .header-section {
-                padding: 2rem 1rem;
-            }
+        .info {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
 
-            .content-section {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            top: 25px;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .info:hover .popup {
+            display: block;
+        }
+
+        .close-btn {
+            color: red;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
         }
 
         .floating-help {
@@ -102,6 +223,31 @@
         .floating-help:hover {
             transform: scale(1.1);
         }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 2rem 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -116,6 +262,11 @@
         <div class="content-section" data-aos="fade-up">
             <h2 class="section-title">ការអប់រំលើសពីមហាវិទ្យាល័យ</h2>
             <p>អ្នកដែលមានបំណងទទួលការសិក្សាអប់រំតាមវគ្គ នៅគ្រឹះស្ថានសិក្សា ឬ ការសិក្សាស្រាវជ្រាវ</p>
+
+            <div class="mb-4">
+                <h3>ទាញយកទម្រង់បែបបទសុំវីសា</h3>
+                <a href="https://overseas.mofa.go.kr/upload/cntnts/kh-en/Application_for_VISA.pdf" class="download-btn" download>ទាញយកទម្រង់បែបបទសុំវីសា</a>
+            </div>
 
             <h3>វគ្គសិក្សាទៀងទាត់ (បរិញ្ញាបត្រ អនុបណ្ឌិត បណ្ឌិត)</h3>
 
@@ -137,11 +288,22 @@
                     <div class="document-list" data-aos="fade-left">
                         <ol>
                             <li>សេចក្តីចម្លងសញ្ញាបត្រចុងក្រោយ និងព្រឹត្តិបត្រពិន្ទុ</li>
-                            <li>លិខិតណែនាំពីនាយកសាកលវិទ្យាល័យ</li>
-                            <li>ឯកសារបង្ហាញអំពីហិរញ្ញវត្ថុ របាយការណ៍សមតុល្យលុយធនាគារ ៦ខែចុងក្រោយ</li>
+                            <li>លិខិតណែនាំពីនាយកសាកលវិទ្យាល័យ 👉 From the university (optional)</li>
+                            <li>ឯកសារបង្ហាញអំពីហិរញ្ញវត្ថុ របាយការណ៍សមតុល្យលុយធនាគារ ៦ខែចុងក្រោយ 👉 From family, professor, or sponsor who supports you.<span style="color: red;">*</span></li>
                             <li>សៀវភៅគ្រួសារ និងសំបុត្រកំណើត</li>
                             <li>លិខិតពិនិត្យសុខភាពជំងឺរបេង</li>
-                            <li>ថតចម្លងលិខិតឆ្លងដែន អត្តសញ្ញាណប័ណ្ណ</li>
+                            <li>
+                                ថតចម្លងលិខិតឆ្លងដែន អត្តសញ្ញាណប័ណ្ណ 
+                                <span class="info">
+                                    👉 From the police station. For ID card, need to translate.<span style="color: red;">*</span>
+                                    <div class="popup">
+                                        <span class="close-btn" onclick="closePopup(event)">×</span>
+                                        <p><strong>Contact:</strong></p>
+                                        <p>📞 Phone: +855 123456789</p>
+                                        <p>📩 Telegram: <a href="https://t.me/yourtelegram" target="_blank">Chat on Telegram</a></p>
+                                    </div>
+                                </span>
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -170,6 +332,46 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mt-4">
+                <h3>ឯកសារគំរូ</h3>
+                <p>ទាញយកឯកសារគំរូដើម្បីមើលទម្រង់នៃឯកសារដែលត្រូវការ:</p>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="pdf-preview">
+                            <img src="/placeholder.svg?height=200&width=150" alt="Example PDF Preview" class="pdf-thumbnail" onclick="openPdfViewer('/myvisa.pdf', 'ឯកសារគំរូ')">
+                            <a href="/myvisa.pdf" class="download-btn mt-2" download>ទាញយកឯកសារគំរូ</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="pdf-preview">
+                            <img src="/placeholder.svg?height=200&width=150" alt="MyVisa PDF Preview" class="pdf-thumbnail" onclick="openPdfViewer('/myvisa.pdf', 'MyVisa PDF')">
+                            <a href="/myvisa.pdf" class="download-btn mt-2" download>ទាញយក MyVisa PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Update the PDF viewer structure -->
+<!-- Update the PDF viewer structure -->
+<div id="pdfViewer" class="pdf-viewer">
+    <div class="pdf-viewer-content">
+        <div class="viewer-header">
+            <div class="viewer-title" id="pdfTitle">PDF Preview</div>
+            <button class="close-btn" onclick="closePdfViewer()" title="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="pdf-container">
+            <iframe id="pdfFrame"></iframe>
+        </div>
+    </div>
+</div>
+        
+            
+            
         </div>
     </div>
 
@@ -182,10 +384,73 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        function openPdfViewer(pdfUrl, title) {
+        const pdfViewer = document.getElementById("pdfViewer");
+        const pdfFrame = document.getElementById("pdfFrame");
+        const pdfTitle = document.getElementById("pdfTitle");
+        
+        // Set the title and PDF source
+        pdfTitle.textContent = title || 'PDF Preview';
+        
+        // Scroll to top before showing the viewer
+        window.scrollTo(0, 0);
+        
+        // Show the viewer
+        pdfViewer.style.display = "block";
+        document.body.style.overflow = "hidden";
+        
+        // Set the PDF source after a short delay to ensure proper loading
+        setTimeout(() => {
+            pdfFrame.src = pdfUrl;
+            // Ensure iframe content starts at top
+            pdfFrame.onload = function() {
+                try {
+                    pdfFrame.contentWindow.scrollTo(0, 0);
+                } catch (e) {
+                    // Handle cross-origin restrictions silently
+                }
+            };
+        }, 100);
+    }
+
+    function closePdfViewer() {
+        const pdfViewer = document.getElementById("pdfViewer");
+        const pdfFrame = document.getElementById("pdfFrame");
+        
+        // Hide the viewer
+        pdfViewer.style.display = "none";
+        
+        // Clear the iframe source
+        setTimeout(() => {
+            pdfFrame.src = "";
+        }, 100);
+        
+        // Restore body scrolling
+        document.body.style.overflow = "";
+    }
+
+    // Close on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            closePdfViewer();
+        }
+    });
+
+    // Close when clicking outside the PDF viewer content
+    document.getElementById("pdfViewer").addEventListener('click', function(event) {
+        if (event.target === this) {
+            closePdfViewer();
+        }
+    });
         AOS.init({
             duration: 1000,
             once: true
         });
+
+        function closePopup(event) {
+            event.stopPropagation();
+            event.target.parentElement.style.display = 'none';
+        }
     </script>
 </body>
 </html>
