@@ -9,6 +9,7 @@ pipeline {
             steps {
                 sh 'env | grep -i git'
                 sh 'curl -v https://api.github.com/repos/MuyleangIng/Preparing_apply_VISA'
+                sh 'pwd'
             }
         }
     }
